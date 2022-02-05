@@ -1,3 +1,9 @@
+### Start Docker
+
+```
+docker-compose -f docker-compose.yaml up
+```
+
 ### Start Postgres connector
 
 ```
