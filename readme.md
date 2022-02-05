@@ -22,6 +22,12 @@ CREATE SOURCE kafka_repl FROM KAFKA BROKER 'kafka:9092' TOPIC 'dbserver1.invento
 CREATE MATERIALIZED VIEW cnt_customer AS SELECT COUNT(*) AS cnt FROM kafka_repl;
 ```
 
+##### Run some query
+
+```SQL
+select * from cnt_customer
+```
+
 ### Login Postgres
 
 ```
