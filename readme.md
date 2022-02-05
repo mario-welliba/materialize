@@ -21,3 +21,15 @@ CREATE SOURCE kafka_repl FROM KAFKA BROKER 'kafka:9092' TOPIC 'dbserver1.invento
 ```SQL
 CREATE MATERIALIZED VIEW cnt_customer AS SELECT COUNT(*) AS cnt FROM kafka_repl;
 ```
+
+### Login Postgres
+
+```
+docker-compose -f docker-compose.yaml exec postgres env PGOPTIONS="--search_path=inventory" bash -c 'psql -U $POSTGRES_USER postgres'
+```
+
+##### Create new Customer
+
+```
+insert into customers values (1005, 'Max', 'Mustermann','max.mustermann@noanswer.org');
+```
