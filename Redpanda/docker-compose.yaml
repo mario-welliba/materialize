@@ -62,4 +62,15 @@ services:
        - materialized
     ports:
       - 3030:3000
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 8080:80
+    depends_on:    
+     - postgres
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+
+
     

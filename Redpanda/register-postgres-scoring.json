@@ -1,0 +1,19 @@
+{
+  "name": "scoring-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "postgres",
+    "database.dbname": "scores",
+    "database.server.name": "dbserver2",
+    "schema.include.list": "public",
+    "publication.autocreate.mode": "filtered",
+    "value.converter.schemas.enable": false,
+    "database.history.kafka.bootstrap.servers": "redpanda:9092",
+    "database.history.kafka.topic": "scoring-history",
+    "slot.name": "scores"
+  }
+}

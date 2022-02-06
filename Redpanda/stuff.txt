@@ -1,0 +1,43 @@
+CREATE SOURCE kafka_repl FROM KAFKA BROKER 'redpanda:9092' TOPIC 'dbserver1.inventory.customers' KEY FORMAT AVRO USING CONFLUENT SCHEMA REGISTRY 'http://redpanda:8081' VALUE FORMAT AVRO USING CONFLUENT SCHEMA REGISTRY 'http://redpanda:8081' ENVELOPE DEBEZIUM UPSERT;
+
+
+CREATE MATERIALIZED VIEW customer AS SELECT * FROM kafka_repl
+
+
+curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-postgres-scoring.json
+
+
+curl -X GET http://localhost:8081/subjects/dbserver1.inventory.customers-value/versions/1
+
+curl -X GET http://localhost:8081/subjects/dbserver1.scoring.scoring-value/versions/1
+
+
+
+
+
+CREATE SOURCE mz_scoring FROM KAFKA BROKER 'redpanda:9092' TOPIC 'dbserver2.public.score_store' KEY FORMAT AVRO USING CONFLUENT SCHEMA REGISTRY 'http://redpanda:8081' VALUE FORMAT AVRO USING CONFLUENT SCHEMA REGISTRY 'http://redpanda:8081' ENVELOPE DEBEZIUM UPSERT;
+
+
+
+CREATE MATERIALIZED VIEW scores AS SELECT * FROM mz_scoring
+
+
+
+-- Table: public.score_store
+
+-- DROP TABLE IF EXISTS public.score_store;
+
+CREATE TABLE IF NOT EXISTS public.score_store
+(
+    id serial NOT NULL,
+    user_id integer NOT NULL,
+    score_id integer NOT NULL,
+    score integer NOT NULL,
+    created timestamp without time zone DEFAULT now(),
+    CONSTRAINT score_store_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.score_store
+    OWNER to postgres;
