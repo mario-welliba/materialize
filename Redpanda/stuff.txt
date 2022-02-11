@@ -19,7 +19,7 @@ CREATE SOURCE mz_scoring FROM KAFKA BROKER 'redpanda:9092' TOPIC 'dbserver2.publ
 
 
 
-CREATE MATERIALIZED VIEW scores AS SELECT * FROM mz_scoring
+CREATE MATERIALIZED VIEW scores AS SELECT * FROM mz_scoring;
 
 CREATE MATERIALIZED VIEW score_dist AS SELECT count(*), score, score_id FROM mz_scoring group by score,score_id;
 
