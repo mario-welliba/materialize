@@ -43,3 +43,31 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.score_store
     OWNER to postgres;
+
+
+
+    INSERT INTO score_store (user_id, score_id, score)
+Select random_between(1, 100) , random_between(1,2), random_between(70,130)
+FROM generate_series(1, 100)
+
+
+
+-- FUNCTION: public.random_between(integer, integer)
+
+-- DROP FUNCTION IF EXISTS public.random_between(integer, integer);
+
+CREATE OR REPLACE FUNCTION public.random_between(
+	low integer,
+	high integer)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE STRICT PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+   RETURN floor(random()* (high-low + 1) + low);
+END;
+$BODY$;
+
+ALTER FUNCTION public.random_between(integer, integer)
+    OWNER TO postgres;
